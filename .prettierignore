@@ -1,0 +1,4 @@
+# Ignore artifacts:
+.nuxt
+lib/datocms/graphql-env.d.ts
+schema.graphql
