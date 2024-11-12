@@ -2,7 +2,7 @@
   <header>
     <h1>DatoCMS + Nuxt Starter Kit</h1>
     <nav>
-      <a class="navlink" href="https://www.datocms.com/docs/next-js"> 📚 Full Integration Guide </a>
+      <a class="navlink" href="https://www.datocms.com/docs/nuxt"> 📚 Full Integration Guide </a>
       <DraftModeToggler />
     </nav>
   </header>
