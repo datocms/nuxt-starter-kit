@@ -53,7 +53,7 @@ Copy the values of the following tokens into the specified environment variable:
 - `NUXT_DATOCMS_DRAFT_CONTENT_CDA_TOKEN`: CDA Only (Draft)
 - `NUXT_DATOCMS_CMA_TOKEN`: CMA Only (Admin)
 
-Then set both `NUXT_SECRET_API_TOKEN` and `NUXT_SIGNED_COOKIE_JWT_SECRET` as a sicure strings:
+Then set both `NUXT_SECRET_API_TOKEN` and `NUXT_SIGNED_COOKIE_JWT_SECRET` by generating two different secure strings (you can use `openssl rand -hex 32` or any other cryptographically-secure random string generator):
 
 - The `NUXT_SECRET_API_TOKEN` will be used to safeguard all API routes from incoming requests from untrusted sources;
 - The `NUXT_SIGNED_COOKIE_JWT_SECRET` will be used to sign the Draft Mode cookies.
