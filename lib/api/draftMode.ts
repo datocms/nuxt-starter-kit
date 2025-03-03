@@ -13,6 +13,12 @@ function jwtToken() {
   );
 }
 
+const DRAFT_MODE_SERIALIZE_OPTIONS = {
+  partitioned: true,
+  secure: true,
+  sameSite: 'none',
+};
+
 /**
  * To be used on API routes: sets the signed cookie required to enter Draft
  * Mode.
@@ -20,11 +26,7 @@ function jwtToken() {
 export function enableDraftMode(event: H3Event<EventHandlerRequest>) {
   const config = useRuntimeConfig();
 
-  setCookie(event, config.public.draftModeCookieName, jwtToken(), {
-    partitioned: true,
-    secure: true,
-    sameSite: 'none',
-  });
+  setCookie(event, config.public.draftModeCookieName, jwtToken(), DRAFT_MODE_SERIALIZE_OPTIONS);
 }
 
 /**
@@ -33,7 +35,14 @@ export function enableDraftMode(event: H3Event<EventHandlerRequest>) {
 export function disableDraftMode(event: H3Event<EventHandlerRequest>) {
   const config = useRuntimeConfig();
 
-  deleteCookie(event, config.public.draftModeCookieName);
+  console.log('event', event);
+  console.log('config', config);
+
+  deleteCookie(event, config.public.draftModeCookieName, {
+    partitioned: true,
+    secure: true,
+    sameSite: 'none',
+  });
 }
 
 /**

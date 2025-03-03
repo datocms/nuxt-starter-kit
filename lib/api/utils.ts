@@ -50,7 +50,7 @@ export function handleUnexpectedError(error: unknown) {
   });
 }
 
-export function isRelativeUrl(path: string):boolean {
+export function isRelativeUrl(path: string): boolean {
   try {
     // Try to create a URL object — if it succeeds without a base, it's absolute
     new URL(path);
