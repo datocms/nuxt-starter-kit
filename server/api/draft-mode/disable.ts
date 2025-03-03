@@ -1,5 +1,5 @@
 import { disableDraftMode } from '~/lib/api/draftMode';
-import { ensureHttpMethods } from '~/lib/api/utils';
+import { ensureHttpMethods, isRelativeUrl } from '~/lib/api/utils';
 
 /*
  * This API route disables Draft Mode, by deleting the signed cookie.
@@ -12,7 +12,7 @@ export default eventHandler(async (event) => {
   const url = query.url || '/';
 
   // Avoid open redirect vulnerabilities
-  if (url.startsWith('http://') || url.startsWith('https://')) {
+  if (!isRelativeUrl(url)) {
     throw createError({ status: 422, message: 'URL must be relative!' });
   }
 
