@@ -1,5 +1,6 @@
 import type { EventHandlerRequest, H3Event } from 'h3';
 import jwt, { type JwtPayload } from 'jsonwebtoken';
+import type { CookieSerializeOptions } from 'cookie-es';
 
 /**
  * Generates a JSON Web Token containing a DatoCMS token capable of
@@ -13,7 +14,7 @@ function jwtToken() {
   );
 }
 
-const DRAFT_MODE_SERIALIZE_OPTIONS = {
+const DRAFT_MODE_SERIALIZE_OPTIONS: CookieSerializeOptions = {
   partitioned: true,
   secure: true,
   sameSite: 'none',
@@ -35,14 +36,7 @@ export function enableDraftMode(event: H3Event<EventHandlerRequest>) {
 export function disableDraftMode(event: H3Event<EventHandlerRequest>) {
   const config = useRuntimeConfig();
 
-  console.log('event', event);
-  console.log('config', config);
-
-  deleteCookie(event, config.public.draftModeCookieName, {
-    partitioned: true,
-    secure: true,
-    sameSite: 'none',
-  });
+  deleteCookie(event, config.public.draftModeCookieName, DRAFT_MODE_SERIALIZE_OPTIONS);
 }
 
 /**
