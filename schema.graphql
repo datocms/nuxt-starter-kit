@@ -2406,6 +2406,7 @@ union PageModelStructuredTextBlocksField = ImageBlockRecord | ImageGalleryBlockR
 
 type PageModelStructuredTextField {
   blocks: [PageModelStructuredTextBlocksField!]!
+  inlineBlocks: [String!]!
   links: [PageRecord!]!
   value: JsonField!
 }

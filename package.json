@@ -14,10 +14,10 @@
     "lint": "prettier --check ."
   },
   "dependencies": {
-    "@datocms/cda-client": "^0.2.0",
-    "@datocms/cma-client": "^3.3.5",
+    "@datocms/cda-client": "^0.2.6",
+    "@datocms/cma-client": "^4.0.1",
     "@mux/mux-player": "^2.8.0",
-    "datocms-structured-text-to-plain-text": "^4.0.1",
+    "datocms-structured-text-to-plain-text": "^5.0.0",
     "gql.tada": "^1.8.2",
     "highlight.js": "^11.10.0",
     "jsdom": "^26.0.0",
@@ -26,7 +26,7 @@
     "nuxt": "^3.15.4",
     "serialize-error": "^11.0.3",
     "vue": "latest",
-    "vue-datocms": "^7.0.5"
+    "vue-datocms": "^8.1.2"
   },
   "devDependencies": {
     "@types/jsdom": "^21.1.7",
