@@ -1,11 +1,11 @@
-import type { RawApiTypes, SchemaTypes } from '@datocms/cma-client';
+import type { ApiTypes, RawApiTypes } from '@datocms/cma-client';
 import { ensureHttpMethods, handleUnexpectedError } from '~/lib/api/utils';
 import type { AnyModel } from '~/lib/datocms/cma-types';
 import { recordToWebsiteRoute } from '~/lib/datocms/recordInfo';
 
 type WebPreviewsRequestBody = {
   item: RawApiTypes.Item<AnyModel>;
-  itemType: SchemaTypes.ItemType;
+  itemType: ApiTypes.ItemType;
   locale: string;
 };
 
