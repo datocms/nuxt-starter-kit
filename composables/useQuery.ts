@@ -1,5 +1,4 @@
-import type { AsyncData } from '#app';
-import { buildRequestInit } from '@datocms/cda-client';
+import { executeQuery } from '@datocms/cda-client';
 import type { TadaDocumentNode } from 'gql.tada';
 import { hash } from 'ohash';
 import { useQuerySubscription } from 'vue-datocms';
@@ -17,7 +16,7 @@ type Options<Variables> = {
  *
  * When Draft Mode is OFF:
  *
- * - Thanks to `useFetch`, the GraphQL query is executed only on the server,
+ * - Thanks to `useAsyncData`, the GraphQL query is executed only on the server,
  *   then data is properly forwarded to the client in the payload.
  * - The contents are returned in their published version.
  *
@@ -53,22 +52,15 @@ export async function useQuery<Result, Variables>(
   if (!apiToken) {
     throw new Error('Missing API token');
   }
-  const initialData = useFetch('https://graphql.datocms.com/', {
-    ...buildRequestInit(query, {
+
+  const initialData = useAsyncData(hash([query, options]), () =>
+    executeQuery(query, {
       token: apiToken,
       includeDrafts: Boolean(draftMode),
       excludeInvalid: true,
+      variables: options?.variables,
     }),
-    key: hash([query, options]),
-    transform: ({ data, errors }) => {
-      if (errors)
-        throw new Error(
-          `Something went wrong while executing the query: ${JSON.stringify(errors)}`,
-        );
-
-      return data;
-    },
-  }) as AsyncData<Result, null>;
+  );
 
   // If the Draft Mode is off, or if it is active but the composable is run
   // server-side, we simply return the result of the query.
