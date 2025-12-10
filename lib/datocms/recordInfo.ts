@@ -4,7 +4,7 @@
  * This file uses types generated from your DatoCMS schema via `npm run generate-cma-types`.
  * The generated types provide full autocomplete and compile-time safety when
  * accessing record fields.
- *
+ *xp
  * See: https://www.datocms.com/docs/content-management-api/resources/item#type-safe-development-with-typescript
  */
 import type { RawApiTypes } from '@datocms/cma-client';
@@ -28,7 +28,7 @@ import type { AnyModel } from './cma-types';
  * When items come from webhooks (like the Web Previews plugin), the item type ID
  * is in `relationships.item_type.data.id` instead.
  */
-function getItemTypeId(item: RawApiTypes.Item<AnyModel>): string | undefined {
+function getItemTypeId(item: RawApiTypes.Item<AnyModel>) {
   // CMA client adds __itemTypeId when fetching items
   if (item.__itemTypeId) {
     return item.__itemTypeId;
@@ -46,7 +46,7 @@ function getItemTypeId(item: RawApiTypes.Item<AnyModel>): string | undefined {
 export async function recordToWebsiteRoute(
   item: RawApiTypes.Item<AnyModel>,
   _locale: string,
-): Promise<string | null> {
+) {
   const itemTypeId = getItemTypeId(item);
 
   switch (itemTypeId) {
@@ -62,7 +62,7 @@ export async function recordToWebsiteRoute(
 export async function recordToSlug(
   item: RawApiTypes.Item<AnyModel>,
   _locale: string,
-): Promise<string | null> {
+) {
   const itemTypeId = getItemTypeId(item);
 
   switch (itemTypeId) {
