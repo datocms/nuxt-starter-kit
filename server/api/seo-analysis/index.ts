@@ -76,7 +76,7 @@ export default eventHandler(async (event) => {
 
     if (!websitePath) {
       throw createError({
-        message: `Don't know which route corresponds to record #${itemId} (model: ${itemTypeApiKey})!`,
+        message: `Don\'t know which route corresponds to record #${itemId} (model: ${itemTypeApiKey})!`,
         status: 404,
       });
     }
