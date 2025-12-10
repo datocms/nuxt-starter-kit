@@ -43,10 +43,7 @@ function getItemTypeId(item: RawApiTypes.Item<AnyModel>) {
   return undefined;
 }
 
-export async function recordToWebsiteRoute(
-  item: RawApiTypes.Item<AnyModel>,
-  _locale: string,
-) {
+export async function recordToWebsiteRoute(item: RawApiTypes.Item<AnyModel>, _locale: string) {
   const itemTypeId = getItemTypeId(item);
 
   switch (itemTypeId) {
@@ -59,10 +56,7 @@ export async function recordToWebsiteRoute(
   }
 }
 
-export async function recordToSlug(
-  item: RawApiTypes.Item<AnyModel>,
-  _locale: string,
-) {
+export async function recordToSlug(item: RawApiTypes.Item<AnyModel>, _locale: string) {
   const itemTypeId = getItemTypeId(item);
 
   switch (itemTypeId) {
