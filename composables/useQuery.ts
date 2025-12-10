@@ -53,13 +53,6 @@ export async function useQuery<Result, Variables>(
   if (!apiToken) {
     throw new Error('Missing API token');
   }
-  /*
-   * Type guard to validate GraphQL response shape from the DatoCMS CDA.
-   */
-  const isGraphQLResponse = (
-    response: unknown,
-  ): response is { data: Result; errors?: Array<{ message: string }> } =>
-    typeof response === 'object' && response !== null && 'data' in response;
 
   const requestInit = buildRequestInit(query, {
     token: apiToken,
@@ -71,15 +64,15 @@ export async function useQuery<Result, Variables>(
     ...requestInit,
     method: 'POST',
     key: hash([query, options]),
-    transform: (response: unknown) => {
-      if (!isGraphQLResponse(response)) {
-        throw new Error('Invalid response from DatoCMS GraphQL API');
-      }
-
+    transform: (response: { data?: Result | null; errors?: Array<{ message: string }> }) => {
       if (response.errors) {
         throw new Error(
           `Something went wrong while executing the query: ${JSON.stringify(response.errors)}`,
         );
+      }
+
+      if (!response.data) {
+        throw new Error('No data returned from DatoCMS GraphQL API');
       }
 
       return response.data;
