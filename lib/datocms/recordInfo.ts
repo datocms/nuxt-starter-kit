@@ -21,11 +21,35 @@ import type { AnyModel } from './cma-types';
  * - server/api/preview-links/index.ts
  */
 
+/**
+ * Gets the item type ID from a DatoCMS item.
+ *
+ * When items are fetched via the CMA client, `__itemTypeId` is added to the object.
+ * When items come from webhooks (like the Web Previews plugin), the item type ID
+ * is in `relationships.item_type.data.id` instead.
+ */
+function getItemTypeId(item: RawApiTypes.Item<AnyModel>): string | undefined {
+  // CMA client adds __itemTypeId when fetching items
+  if (item.__itemTypeId) {
+    return item.__itemTypeId;
+  }
+
+  // Webhook payloads have the item type ID in relationships
+  const relationshipId = item.relationships?.item_type?.data?.id;
+  if (typeof relationshipId === 'string') {
+    return relationshipId;
+  }
+
+  return undefined;
+}
+
 export async function recordToWebsiteRoute(
   item: RawApiTypes.Item<AnyModel>,
   _locale: string,
 ): Promise<string | null> {
-  switch (item.__itemTypeId) {
+  const itemTypeId = getItemTypeId(item);
+
+  switch (itemTypeId) {
     // Page model
     case 'JdG722SGTSG_jEB1Jx-0XA': {
       return '/';
@@ -39,7 +63,9 @@ export async function recordToSlug(
   item: RawApiTypes.Item<AnyModel>,
   _locale: string,
 ): Promise<string | null> {
-  switch (item.__itemTypeId) {
+  const itemTypeId = getItemTypeId(item);
+
+  switch (itemTypeId) {
     // Page model
     case 'JdG722SGTSG_jEB1Jx-0XA': {
       /*

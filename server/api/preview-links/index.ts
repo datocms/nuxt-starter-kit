@@ -1,5 +1,5 @@
 import type { ApiTypes, RawApiTypes } from '@datocms/cma-client';
-import { ensureHttpMethods, getSiteUrl, handleUnexpectedError } from '~/lib/api/utils';
+import { ensureHttpMethods, handleUnexpectedError } from '~/lib/api/utils';
 import type { AnyModel } from '~/lib/datocms/cma-types';
 import { recordToWebsiteRoute } from '~/lib/datocms/recordInfo';
 
@@ -76,7 +76,7 @@ export default eventHandler(async (event) => {
              * endpoint that enables the Draft Mode.
              */
             `/api/draft-mode/enable?url=${url}&token=${token}`,
-            getSiteUrl(event),
+            getRequestURL(event),
           ).toString(),
         });
       }
@@ -95,7 +95,7 @@ export default eventHandler(async (event) => {
              * endpoint that disables the Draft Mode.
              */
             `/api/draft-mode/disable?url=${url}`,
-            getSiteUrl(event),
+            getRequestURL(event),
           ).toString(),
         });
       }

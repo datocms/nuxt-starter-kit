@@ -3,19 +3,6 @@ import type { EventHandlerRequest, H3Event, HTTPMethod } from 'h3';
 import { serializeError } from 'serialize-error';
 
 /**
- * Returns the base URL for the current site.
- *
- * On Netlify, `getRequestURL()` returns localhost because serverless functions
- * don't receive the correct host headers. We need to read the host header directly.
- */
-export function getSiteUrl(event: H3Event<EventHandlerRequest>): string {
-  const host = getHeader(event, 'host');
-  const proto = getHeader(event, 'x-forwarded-proto') || 'https';
-
-  return `${proto}://${host}`;
-}
-
-/**
  * To be used on API routes: ensure that an incoming request method matches one
  * of the allowed methods.
  */
