@@ -53,29 +53,20 @@ export async function useQuery<Result, Variables>(
   if (!apiToken) {
     throw new Error('Missing API token');
   }
-
-  const requestInit = buildRequestInit(query, {
-    token: apiToken,
-    includeDrafts: Boolean(draftMode),
-    excludeInvalid: true,
-  });
-
   const initialData = useFetch('https://graphql.datocms.com/', {
-    ...requestInit,
-    method: 'POST',
+    ...buildRequestInit(query, {
+      token: apiToken,
+      includeDrafts: Boolean(draftMode),
+      excludeInvalid: true,
+    }),
     key: hash([query, options]),
-    transform: (response: { data?: Result | null; errors?: Array<{ message: string }> }) => {
-      if (response.errors) {
+    transform: ({ data, errors }) => {
+      if (errors)
         throw new Error(
-          `Something went wrong while executing the query: ${JSON.stringify(response.errors)}`,
+          `Something went wrong while executing the query: ${JSON.stringify(errors)}`,
         );
-      }
 
-      if (!response.data) {
-        throw new Error('No data returned from DatoCMS GraphQL API');
-      }
-
-      return response.data;
+      return data;
     },
   }) as AsyncData<Result, null>;
 
