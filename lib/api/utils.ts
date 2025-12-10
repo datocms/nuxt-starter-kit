@@ -3,6 +3,35 @@ import type { EventHandlerRequest, H3Event, HTTPMethod } from 'h3';
 import { serializeError } from 'serialize-error';
 
 /**
+ * Returns the base URL for the current site.
+ *
+ * On Netlify, the `getRequestURL()` function can return incorrect URLs because
+ * serverless functions may receive internal AWS Lambda URLs or incorrect host
+ * headers. This helper automatically detects the correct URL by checking
+ * Netlify's automatic environment variables first, then falling back to
+ * `getRequestURL()` for local development or other platforms like Vercel.
+ */
+export function getSiteUrl(event: H3Event<EventHandlerRequest>): string {
+  /*
+   * Netlify automatically sets NETLIFY=true along with these URL variables:
+   * - URL: The main site URL (e.g., https://my-site.netlify.app)
+   * - DEPLOY_PRIME_URL: The primary URL for the deploy (handles branch deploys)
+   * See: https://docs.netlify.com/configure-builds/environment-variables/#deploy-urls-and-metadata
+   */
+  const isNetlify = process.env.NETLIFY === 'true';
+
+  if (isNetlify) {
+    const netlifyUrl = process.env.DEPLOY_PRIME_URL || process.env.URL;
+
+    if (netlifyUrl) {
+      return netlifyUrl;
+    }
+  }
+
+  return getRequestURL(event).origin;
+}
+
+/**
  * To be used on API routes: ensure that an incoming request method matches one
  * of the allowed methods.
  */

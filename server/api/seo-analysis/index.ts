@@ -1,7 +1,7 @@
 import { buildClient } from '@datocms/cma-client';
 import { parse } from 'node-html-parser';
 import { draftModeHeaders } from '~/lib/api/draftMode';
-import { ensureHttpMethods, handleUnexpectedError } from '~/lib/api/utils';
+import { ensureHttpMethods, getSiteUrl, handleUnexpectedError } from '~/lib/api/utils';
 import type { AnyModel } from '~/lib/datocms/cma-types';
 import { recordToSlug, recordToWebsiteRoute } from '~/lib/datocms/recordInfo';
 
@@ -86,7 +86,7 @@ export default eventHandler(async (event) => {
      * do this, we set the cookies that are obtained by temporarily enabling
      * Draft Mode.
      */
-    const pageRequest = await fetch(new URL(websitePath, getRequestURL(event)).toString(), {
+    const pageRequest = await fetch(new URL(websitePath, getSiteUrl(event)).toString(), {
       headers: draftModeHeaders(),
     });
 
