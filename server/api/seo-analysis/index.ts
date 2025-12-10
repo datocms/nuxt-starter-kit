@@ -2,6 +2,7 @@ import { buildClient } from '@datocms/cma-client';
 import { parse } from 'node-html-parser';
 import { draftModeHeaders } from '~/lib/api/draftMode';
 import { ensureHttpMethods, handleUnexpectedError } from '~/lib/api/utils';
+import type { AnyModel } from '~/lib/datocms/cma-types';
 import { recordToSlug, recordToWebsiteRoute } from '~/lib/datocms/recordInfo';
 
 type SeoAnalysisQuery = {
@@ -66,16 +67,16 @@ export default eventHandler(async (event) => {
       environment: sandboxEnvironmentId,
     });
 
-    const { data: item } = await client.items.rawFind(itemId);
+    const { data: item } = await client.items.rawFind<AnyModel>(itemId);
 
     // We can use this info to generate the frontend URL, and the page slug
-    const websitePath = await recordToWebsiteRoute(item, itemTypeApiKey, locale);
+    const websitePath = await recordToWebsiteRoute(item, locale);
 
-    const slug = await recordToSlug(item, itemTypeApiKey, locale);
+    const slug = await recordToSlug(item, locale);
 
     if (!websitePath) {
       throw createError({
-        message: `Don\'t know which route corresponds to record #${itemId} (model: ${itemTypeApiKey})!`,
+        message: `Don't know which route corresponds to record #${itemId} (model: ${itemTypeApiKey})!`,
         status: 404,
       });
     }

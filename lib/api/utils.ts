@@ -41,12 +41,29 @@ export function handleUnexpectedError(error: unknown) {
     });
   }
 
-  const { message, ...data } = serializeError(error);
+  const serialized = serializeError(error);
+
+  /*
+   * serializeError returns `unknown` when input is `unknown`.
+   * We check if the result is an object and extract properties safely.
+   */
+  const isErrorObject = (value: unknown): value is Record<string, unknown> =>
+    typeof value === 'object' && value !== null;
+
+  if (isErrorObject(serialized)) {
+    const { message, ...data } = serialized;
+    const errorMessage = typeof message === 'string' ? message : 'An unexpected error occurred';
+
+    throw createError({
+      statusCode: 500,
+      message: errorMessage,
+      data,
+    });
+  }
 
   throw createError({
     statusCode: 500,
-    message: message ?? 'An unexpected error occurred',
-    data,
+    message: 'An unexpected error occurred',
   });
 }
 

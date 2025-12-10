@@ -20,6 +20,8 @@ This project aims to be a great starting point for your Nuxt projects that need 
 - 🧩 **Plugin ready** — Support for the fantastic plugins [Web Previews](https://www.datocms.com/marketplace/plugins/i/datocms-plugin-web-previews) and [SEO/Readability Analysis](https://www.datocms.com/marketplace/plugins/i/datocms-plugin-seo-readability-analysis).
 - 🔄 **DatoCMS's Real-time Updates API** — Your editors can see updated content instantly as soon as you save a new version on DatoCMS.
 - 🌐 **SEO Metadata** — Full integration between Nuxt and the SEO settings coming from DatoCMS.
+- 📦 **Official CDA Client** — Uses [@datocms/cda-client](https://github.com/datocms/cda-client) for performant, type-safe GraphQL queries to the Content Delivery API.
+- 🔒 **Type-Safe CMA Client** — Uses [@datocms/cma-client](https://www.datocms.com/docs/content-management-api/resources/item#type-safe-development-with-typescript) with auto-generated types from your schema for full autocomplete and compile-time safety.
 
 ## How to use
 
@@ -70,6 +72,50 @@ Your website should be up and running on [http://localhost:3000](http://localhos
 ## VS Code
 
 It is highly recommended to follow [these instructions](https://gql-tada.0no.co/get-started/installation#vscode-setup) for an optimal experience with Visual Studio Code, including features like diagnostics, auto-completions, and type hovers for GraphQL.
+
+## Type-Safe CMA Development
+
+This project uses [DatoCMS's TypeScript type generation](https://www.datocms.com/docs/content-management-api/resources/item#type-safe-development-with-typescript) for the Content Management API (CMA). This provides full autocomplete and compile-time safety when accessing record fields.
+
+### Regenerating types
+
+When you modify your DatoCMS schema (add/remove models or fields), regenerate the types:
+
+```bash
+npm run generate-cma-types
+```
+
+This command runs automatically during `npm install` (via the `prepare` script).
+
+### Adding new models
+
+When you add new models to your DatoCMS project, update `lib/datocms/recordInfo.ts` to handle them:
+
+1. Run `npm run generate-cma-types` to update the types
+2. Open `lib/datocms/cma-types.ts` to find your new model's ID (the second parameter in `ItemTypeDefinition`)
+3. Add a new case in `recordToWebsiteRoute` and/or `recordToSlug`:
+
+```typescript
+export async function recordToWebsiteRoute(
+  item: RawApiTypes.Item<AnyModel>,
+  _locale: string,
+): Promise<string | null> {
+  switch (item.__itemTypeId) {
+    // Page model
+    case 'JdG722SGTSG_jEB1Jx-0XA': {
+      return '/';
+    }
+    // Add your new model here:
+    case 'YOUR_MODEL_ID': {
+      return `/your-route/${item.attributes.slug}`;
+    }
+    default:
+      return null;
+  }
+}
+```
+
+TypeScript will provide autocomplete for `item.attributes` based on the model's fields.
 
 ## <!--datocms-autoinclude-footer start-->
 
