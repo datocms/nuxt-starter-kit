@@ -49,12 +49,12 @@ export default eventHandler(async (event) => {
      * along with information about which locale they are currently viewing in
      * the interface
      */
-    const { item, locale } = await readBody<WebPreviewsRequestBody>(event, {
+    const { item, itemType, locale } = await readBody<WebPreviewsRequestBody>(event, {
       strict: true,
     });
 
     // We can use this info to generate the frontend URL associated
-    const url = await recordToWebsiteRoute(item, locale);
+    const url = recordToWebsiteRoute(item, locale, itemType.id);
 
     const response: WebPreviewsResponse = { previewLinks: [] };
 
