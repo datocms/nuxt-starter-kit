@@ -20,6 +20,8 @@ This project aims to be a great starting point for your Nuxt projects that need 
 - 🧩 **Plugin ready** — Support for the fantastic plugins [Web Previews](https://www.datocms.com/marketplace/plugins/i/datocms-plugin-web-previews) and [SEO/Readability Analysis](https://www.datocms.com/marketplace/plugins/i/datocms-plugin-seo-readability-analysis).
 - 🔄 **DatoCMS's Real-time Updates API** — Your editors can see updated content instantly as soon as you save a new version on DatoCMS.
 - 🌐 **SEO Metadata** — Full integration between Nuxt and the SEO settings coming from DatoCMS.
+- 📦 **Official CDA Client** — Uses [@datocms/cda-client](https://github.com/datocms/cda-client) for performant, type-safe GraphQL queries to the Content Delivery API.
+- 🔒 **Type-Safe CMA Client** — Uses [@datocms/cma-client](https://www.datocms.com/docs/content-management-api/resources/item#type-safe-development-with-typescript) with auto-generated types from your schema for full autocomplete and compile-time safety.
 
 ## How to use
 

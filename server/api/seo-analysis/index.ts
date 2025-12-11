@@ -2,6 +2,7 @@ import { buildClient } from '@datocms/cma-client';
 import { parse } from 'node-html-parser';
 import { draftModeHeaders } from '~/lib/api/draftMode';
 import { ensureHttpMethods, handleUnexpectedError } from '~/lib/api/utils';
+import type { AnyModel } from '~/lib/datocms/cma-types';
 import { recordToSlug, recordToWebsiteRoute } from '~/lib/datocms/recordInfo';
 
 type SeoAnalysisQuery = {
@@ -66,12 +67,12 @@ export default eventHandler(async (event) => {
       environment: sandboxEnvironmentId,
     });
 
-    const { data: item } = await client.items.rawFind(itemId);
+    const { data: item } = await client.items.rawFind<AnyModel>(itemId);
 
     // We can use this info to generate the frontend URL, and the page slug
-    const websitePath = await recordToWebsiteRoute(item, itemTypeApiKey, locale);
+    const websitePath = recordToWebsiteRoute(item, locale, itemTypeId);
 
-    const slug = await recordToSlug(item, itemTypeApiKey, locale);
+    const slug = recordToSlug(item, locale, itemTypeId);
 
     if (!websitePath) {
       throw createError({

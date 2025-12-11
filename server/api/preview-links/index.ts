@@ -1,10 +1,11 @@
-import type { SchemaTypes } from '@datocms/cma-client';
+import type { ApiTypes, RawApiTypes } from '@datocms/cma-client';
 import { ensureHttpMethods, handleUnexpectedError } from '~/lib/api/utils';
+import type { AnyModel } from '~/lib/datocms/cma-types';
 import { recordToWebsiteRoute } from '~/lib/datocms/recordInfo';
 
 type WebPreviewsRequestBody = {
-  item: SchemaTypes.Item;
-  itemType: SchemaTypes.ItemType;
+  item: RawApiTypes.Item<AnyModel>;
+  itemType: ApiTypes.ItemType;
   locale: string;
 };
 
@@ -53,7 +54,7 @@ export default eventHandler(async (event) => {
     });
 
     // We can use this info to generate the frontend URL associated
-    const url = await recordToWebsiteRoute(item, itemType.attributes.api_key, locale);
+    const url = recordToWebsiteRoute(item, locale, itemType.id);
 
     const response: WebPreviewsResponse = { previewLinks: [] };
 
