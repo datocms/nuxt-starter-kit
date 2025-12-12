@@ -15,7 +15,7 @@
     "lint": "prettier --check ."
   },
   "dependencies": {
-    "@datocms/cda-client": "^0.2.7",
+    "@datocms/cda-client": "^0.2.9",
     "@datocms/cma-client": "^5.2.0",
     "@mux/mux-player": "^3.10.1",
     "datocms-structured-text-to-plain-text": "^5.1.7",

@@ -22,14 +22,14 @@ import type { AnyModel } from './cma-types';
  */
 
 export function recordToWebsiteRoute(
-  _item: RawApiTypes.Item<AnyModel>,
+  item: RawApiTypes.Item<AnyModel>,
   _locale: string,
   itemTypeId: string,
 ) {
   switch (itemTypeId) {
     // Page model
     case 'JdG722SGTSG_jEB1Jx-0XA': {
-      return '/';
+      return `/page/${item.attributes.slug}`;
     }
     default:
       return null;
@@ -46,9 +46,9 @@ export function recordToSlug(
     case 'JdG722SGTSG_jEB1Jx-0XA': {
       /*
        * Using generated types, TypeScript knows exactly which fields exist.
-       * `item.attributes.title` is fully typed - no casts needed!
+       * `item.attributes.slug` is fully typed - no casts needed!
        */
-      return item.attributes.title;
+      return item.attributes.slug;
     }
     default:
       return null;

@@ -12,8 +12,8 @@ import { type ResultOf, graphql } from '~/lib/datocms/graphql';
  */
 export const query = graphql(
   /* GraphQL */ `
-    query BasicPageQuery {
-      page {
+    query BasicPageQuery($slug: String!) {
+      page(filter: { slug: { eq: $slug } }) {
         _seoMetaTags {
           ...TagFragment
         }
@@ -43,6 +43,7 @@ export const query = graphql(
             }
             ... on PageRecord {
               title
+              slug
             }
           }
         }

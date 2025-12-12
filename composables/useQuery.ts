@@ -53,22 +53,24 @@ export async function useQuery<Result, Variables>(
   if (!apiToken) {
     throw new Error('Missing API token');
   }
-  const initialData = useFetch('https://graphql.datocms.com/', {
+
+  const initialData = await useFetch('https://graphql.datocms.com/', {
     ...buildRequestInit(query, {
       token: apiToken,
       includeDrafts: Boolean(draftMode),
       excludeInvalid: true,
+      variables: options?.variables,
     }),
     key: hash([query, options]),
-    transform: ({ data, errors }) => {
-      if (errors)
+    transform: (response: { data: Result; errors?: any[] }) => {
+      if (response.errors)
         throw new Error(
-          `Something went wrong while executing the query: ${JSON.stringify(errors)}`,
+          `Something went wrong while executing the query: ${JSON.stringify(response.errors)}`,
         );
 
-      return data;
+      return response.data;
     },
-  }) as AsyncData<Result, null>;
+  });
 
   // If the Draft Mode is off, or if it is active but the composable is run
   // server-side, we simply return the result of the query.
@@ -82,7 +84,7 @@ export async function useQuery<Result, Variables>(
     query,
     variables: options?.variables,
     token: apiToken,
-    initialData: (await initialData).data.value,
+    initialData: (initialData as AsyncData<Result, null>).data.value,
     includeDrafts: true,
     excludeInvalid: true,
   }).data;

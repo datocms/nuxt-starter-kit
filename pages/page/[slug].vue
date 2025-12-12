@@ -41,7 +41,19 @@ import {
 import { useQuery } from '~/composables/useQuery';
 import { query, type StructuredTextBlock, type StructuredTextRecord } from './query';
 
-const data = await useQuery(query);
+const route = useRoute();
+const slug = route.params.slug as string;
+
+const data = await useQuery(query, { variables: { slug } });
+
+// Handle non-existing pages with 404
+if (!data.value?.page) {
+  throw createError({
+    statusCode: 404,
+    statusMessage: 'Page Not Found',
+    fatal: true,
+  });
+}
 
 /**
  * We use the `toHead()` helper provided by vue-datocms to automate the creation
@@ -70,7 +82,7 @@ const customNodeRules = [
 const renderInlineRecord = ({ record }: RenderInlineRecordContext<StructuredTextRecord>) => {
   switch (record.__typename) {
     case 'PageRecord': {
-      return h(NuxtLink, { href: '/', class: 'pill' }, () => record.title);
+      return h(NuxtLink, { href: `/page/${record.slug}`, class: 'pill' }, () => record.title);
     }
   }
 };
@@ -86,7 +98,7 @@ const renderLinkToRecord = ({
 }: RenderRecordLinkContext<StructuredTextRecord>) => {
   switch (record.__typename) {
     case 'PageRecord': {
-      return h(NuxtLink, { href: '/' }, () => children);
+      return h(NuxtLink, { href: `/page/${record.slug}` }, () => children);
     }
   }
 };
