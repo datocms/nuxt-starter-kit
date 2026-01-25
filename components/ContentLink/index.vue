@@ -31,12 +31,19 @@ import { ContentLink } from 'vue-datocms';
 
 const router = useRouter();
 const route = useRoute();
+
+// Only enable click-to-edit on devices with hover capability (not touch-only)
+const hasHover = ref(false);
+
+onMounted(() => {
+  hasHover.value = window.matchMedia('(hover: hover)').matches;
+});
 </script>
 
 <template>
   <ContentLink
     :on-navigate-to="(path: string) => router.push(path)"
     :current-path="route.path"
-    :enable-click-to-edit="true"
+    :enable-click-to-edit="hasHover"
   />
 </template>
