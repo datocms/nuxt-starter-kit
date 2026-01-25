@@ -1,5 +1,5 @@
 <template>
-  <DatoVideoPlayer v-bind="other" :data="unmaskedData.video" accentColor="var(--color-accent)" />
+  <DatoVideoPlayer v-bind="other" :data="unmaskedData.video" accentColor="var(--bg-accent)" />
 </template>
 
 <script setup lang="ts">
