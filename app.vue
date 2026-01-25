@@ -2,9 +2,9 @@
   <header>
     <h1>DatoCMS + Nuxt Starter Kit</h1>
     <nav>
-      <a class="navlink" href="https://www.datocms.com/docs/nuxt"> 📚 Full Integration Guide </a>
-      <DraftModeToggler />
+      <a href="https://www.datocms.com/docs/nuxt"> 📚 Full Integration Guide </a>
     </nav>
+    <DraftModeToggler />
   </header>
   <main><NuxtPage /></main>
 </template>
