@@ -6,15 +6,20 @@
       Although the <StructuredText /> component knows how to convert all "standard"
       elements (headings, bullet lists, etc.) into HTML, it's possible to customize
       the rendering of each node.
+
+      The data-datocms-content-link-group attribute enables ContentLink to
+      properly handle click-to-edit for structured text and embedded blocks.
     -->
 
-    <StructuredText
-      :data="data.page.structuredText"
-      :customNodeRules="customNodeRules"
-      :renderInlineRecord="renderInlineRecord"
-      :renderLinkToRecord="renderLinkToRecord"
-      :renderBlock="renderBlock"
-    />
+    <div data-datocms-content-link-group>
+      <StructuredText
+        :data="data.page.structuredText"
+        :customNodeRules="customNodeRules"
+        :renderInlineRecord="renderInlineRecord"
+        :renderLinkToRecord="renderLinkToRecord"
+        :renderBlock="renderBlock"
+      />
+    </div>
 
     <footer>Published at {{ data.page._firstPublishedAt }}</footer>
   </div>
@@ -82,7 +87,11 @@ const customNodeRules = [
 const renderInlineRecord = ({ record }: RenderInlineRecordContext<StructuredTextRecord>) => {
   switch (record.__typename) {
     case 'PageRecord': {
-      return h(NuxtLink, { href: `/page/${record.slug}`, class: 'pill' }, () => record.title);
+      return h(
+        NuxtLink,
+        { href: `/page/${record.slug}`, class: 'pill', 'data-datocms-content-link-group': '' },
+        () => record.title,
+      );
     }
   }
 };

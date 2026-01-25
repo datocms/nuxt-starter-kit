@@ -60,6 +60,20 @@ export async function useQuery<Result, Variables>(
       includeDrafts: Boolean(draftMode),
       excludeInvalid: true,
       variables: options?.variables,
+      /*
+       * Enable content-link for draft content only. This embeds stega-encoded
+       * metadata in text fields, which the @datocms/content-link package uses
+       * to create click-to-edit overlays. When editors click on content, they're
+       * taken directly to the corresponding field in the DatoCMS editor.
+       *
+       * This works both:
+       * - On the standalone website (opens DatoCMS in a new tab)
+       * - Inside the Web Previews plugin Visual mode (opens field in side panel)
+       *
+       * Only enabled for draft content to avoid the overhead in production.
+       */
+      contentLink: draftMode ? 'v1' : undefined,
+      baseEditingUrl: draftMode ? config.public.datocmsBaseEditingUrl : undefined,
     }),
     key: hash([query, options]),
     transform: (response: { data: Result; errors?: any[] }) => {
@@ -87,5 +101,7 @@ export async function useQuery<Result, Variables>(
     initialData: (initialData as AsyncData<Result, null>).data.value,
     includeDrafts: true,
     excludeInvalid: true,
+    contentLink: 'v1',
+    baseEditingUrl: config.public.datocmsBaseEditingUrl,
   }).data;
 }

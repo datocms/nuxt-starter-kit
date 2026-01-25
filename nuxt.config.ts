@@ -25,6 +25,8 @@ export default defineNuxtConfig({
     public: {
       // set by NUXT_PUBLIC_DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN env variable
       datocmsPublishedContentCdaToken: '',
+      // set by NUXT_PUBLIC_DATOCMS_BASE_EDITING_URL env variable
+      datocmsBaseEditingUrl: '',
       // set by NUXT_PUBLIC_DRAFT_MODE_COOKIE_NAME env variable
       draftModeCookieName: '',
     },

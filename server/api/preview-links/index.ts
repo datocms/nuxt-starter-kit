@@ -75,7 +75,7 @@ export default eventHandler(async (event) => {
              * We generate the URL in a way that it first passes through the
              * endpoint that enables the Draft Mode.
              */
-            `/api/draft-mode/enable?url=${url}&token=${token}`,
+            `/api/draft-mode/enable?redirect=${url}&token=${token}`,
             getRequestURL(event),
           ).toString(),
         });
@@ -94,7 +94,7 @@ export default eventHandler(async (event) => {
              * We generate the URL in a way that it first passes through the
              * endpoint that disables the Draft Mode.
              */
-            `/api/draft-mode/disable?url=${url}`,
+            `/api/draft-mode/disable?redirect=${url}`,
             getRequestURL(event),
           ).toString(),
         });

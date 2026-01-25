@@ -8,8 +8,8 @@ export default eventHandler(async (event) => {
   ensureHttpMethods(event, 'GET');
 
   // Parse query string parameters
-  const query = getQuery<{ url?: string }>(event);
-  const url = query.url || '/';
+  const query = getQuery<{ redirect?: string }>(event);
+  const url = query.redirect || '/';
 
   // Avoid open redirect vulnerabilities
   if (!isRelativeUrl(url)) {

@@ -11,8 +11,8 @@ export default eventHandler(async (event) => {
   const config = useRuntimeConfig();
 
   // Parse query string parameters
-  const query = getQuery<{ url?: string; token?: string }>(event);
-  const url = query.url || '/';
+  const query = getQuery<{ redirect?: string; token?: string }>(event);
+  const url = query.redirect || '/';
 
   // Ensure that the request is coming from a trusted source
   if (query.token !== config.secretApiToken) {
