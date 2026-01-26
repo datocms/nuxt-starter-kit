@@ -26,24 +26,21 @@ import { ContentLink } from 'vue-datocms';
  * This integration is completely automatic when running inside the plugin's iframe,
  * with graceful fallback to opening edit URLs in a new tab when running standalone.
  *
+ * For more advanced use cases (e.g., a custom toolbar to toggle click-to-edit mode),
+ * you can use the `useContentLink` composable from `vue-datocms`, which provides
+ * lower-level control over the content link controller.
+ *
  * @see https://www.datocms.com/marketplace/plugins/i/datocms-plugin-web-previews
  */
 
 const router = useRouter();
 const route = useRoute();
-
-// Only enable click-to-edit on devices with hover capability (not touch-only)
-const hasHover = ref(false);
-
-onMounted(() => {
-  hasHover.value = window.matchMedia('(hover: hover)').matches;
-});
 </script>
 
 <template>
   <ContentLink
     :on-navigate-to="(path: string) => router.push(path)"
     :current-path="route.path"
-    :enable-click-to-edit="hasHover"
+    :enable-click-to-edit="{ hoverOnly: true }"
   />
 </template>
