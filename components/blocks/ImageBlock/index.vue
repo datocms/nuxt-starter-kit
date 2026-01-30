@@ -1,5 +1,5 @@
 <template>
-  <figure data-datocms-content-link-boundary>
+  <figure data-datocms-content-link-group>
     <!-- Display responsive image -->
     <ResponsiveImage :data="unmaskedData.asset.responsiveImage" />
     <!-- Display image title -->
