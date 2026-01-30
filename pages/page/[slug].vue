@@ -89,7 +89,7 @@ const renderInlineRecord = ({ record }: RenderInlineRecordContext<StructuredText
     case 'PageRecord': {
       return h(
         NuxtLink,
-        { href: `/page/${record.slug}`, class: 'pill', 'data-datocms-content-link-group': '' },
+        { href: `/page/${record.slug}`, class: 'pill', 'data-datocms-content-link-boundary': '' },
         () => record.title,
       );
     }
