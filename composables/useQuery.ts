@@ -60,6 +60,10 @@ export async function useQuery<Result, Variables>(
       includeDrafts: Boolean(draftMode),
       excludeInvalid: true,
       variables: options?.variables,
+      contentLink: draftMode ? 'v1' : undefined,
+      baseEditingUrl: draftMode
+        ? config.public.datocmsBaseEditingUrl || undefined
+        : undefined,
     }),
     key: hash([query, options]),
     transform: (response: { data: Result; errors?: any[] }) => {
@@ -87,5 +91,7 @@ export async function useQuery<Result, Variables>(
     initialData: (initialData as AsyncData<Result, null>).data.value,
     includeDrafts: true,
     excludeInvalid: true,
+    contentLink: 'v1',
+    baseEditingUrl: config.public.datocmsBaseEditingUrl || undefined,
   }).data;
 }

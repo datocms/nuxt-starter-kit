@@ -8,13 +8,15 @@
       the rendering of each node.
     -->
 
-    <StructuredText
-      :data="data.page.structuredText"
-      :customNodeRules="customNodeRules"
-      :renderInlineRecord="renderInlineRecord"
-      :renderLinkToRecord="renderLinkToRecord"
-      :renderBlock="renderBlock"
-    />
+    <div data-datocms-content-link-group>
+      <StructuredText
+        :data="data.page.structuredText"
+        :customNodeRules="customNodeRules"
+        :renderInlineRecord="renderInlineRecord"
+        :renderLinkToRecord="renderLinkToRecord"
+        :renderBlock="renderBlock"
+      />
+    </div>
 
     <footer>Published at {{ data.page._firstPublishedAt }}</footer>
   </div>
@@ -82,7 +84,15 @@ const customNodeRules = [
 const renderInlineRecord = ({ record }: RenderInlineRecordContext<StructuredTextRecord>) => {
   switch (record.__typename) {
     case 'PageRecord': {
-      return h(NuxtLink, { href: `/page/${record.slug}`, class: 'pill' }, () => record.title);
+      return h(
+        NuxtLink,
+        {
+          href: `/page/${record.slug}`,
+          class: 'pill',
+          'data-datocms-content-link-boundary': '',
+        },
+        () => record.title,
+      );
     }
   }
 };
@@ -95,10 +105,11 @@ const renderInlineRecord = ({ record }: RenderInlineRecordContext<StructuredText
 const renderLinkToRecord = ({
   record,
   children,
+  transformedMeta,
 }: RenderRecordLinkContext<StructuredTextRecord>) => {
   switch (record.__typename) {
     case 'PageRecord': {
-      return h(NuxtLink, { href: `/page/${record.slug}` }, () => children);
+      return h(NuxtLink, { ...transformedMeta, href: `/page/${record.slug}` }, () => children);
     }
   }
 };

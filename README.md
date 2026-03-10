@@ -17,7 +17,8 @@ This project aims to be a great starting point for your Nuxt projects that need 
 - 🛠️ **Minimal boilerplate** — The project is minimal and exposes only what is necessary to get started, without complicated models that need to be removed.
 - 🚫 **Zero CSS** — There is only one CSS import, which you can remove to use your preferred CSS tool.
 - 📝 **Full support for Draft Mode** — Your editors can always view the latest draft version of the content.
-- 🧩 **Plugin ready** — Support for the fantastic plugins [Web Previews](https://www.datocms.com/marketplace/plugins/i/datocms-plugin-web-previews) and [SEO/Readability Analysis](https://www.datocms.com/marketplace/plugins/i/datocms-plugin-seo-readability-analysis).
+- ✏️ **Click-to-edit overlays** — Integrated [@datocms/content-link](https://www.npmjs.com/package/@datocms/content-link) for intuitive content editing. Click on any content element on your website to instantly open the DatoCMS editor for that specific field.
+- 🧩 **Plugin ready** — Full integration with the [Web Previews](https://www.datocms.com/marketplace/plugins/i/datocms-plugin-web-previews) plugin, including Visual Editing mode for seamless in-context editing, and [SEO/Readability Analysis](https://www.datocms.com/marketplace/plugins/i/datocms-plugin-seo-readability-analysis).
 - 🔄 **DatoCMS's Real-time Updates API** — Your editors can see updated content instantly as soon as you save a new version on DatoCMS.
 - 🌐 **SEO Metadata** — Full integration between Nuxt and the SEO settings coming from DatoCMS.
 - 📦 **Official CDA Client** — Uses [@datocms/cda-client](https://github.com/datocms/cda-client) for performant, type-safe GraphQL queries to the Content Delivery API.
@@ -44,7 +45,7 @@ Once the setup of the project and repo is done, clone the repo locally.
 Copy the sample .env file:
 
 ```bash
-cp .env.local.example .env.local
+cp .env.example .env.local
 ```
 
 In your DatoCMS' project, go to the **Settings** menu at the top and click **API tokens**.
@@ -55,7 +56,13 @@ Copy the values of the following tokens into the specified environment variable:
 - `NUXT_DATOCMS_DRAFT_CONTENT_CDA_TOKEN`: CDA Only (Draft)
 - `NUXT_DATOCMS_CMA_TOKEN`: CMA Only (Read)
 
-Then set both `NUXT_SECRET_API_TOKEN` and `NUXT_SIGNED_COOKIE_JWT_SECRET` by generating two different secure strings (you can use `openssl rand -hex 32` or any other cryptographically-secure random string generator):
+Then set the following additional variables:
+
+- `NUXT_PUBLIC_DATOCMS_BASE_EDITING_URL`: Your DatoCMS environment URL (for example, `https://your-project.admin.datocms.com/environments/main`). This enables click-to-edit overlays that link content directly to the DatoCMS editor.
+- `NUXT_SECRET_API_TOKEN`: A secure string (you can use `openssl rand -hex 32` or any other cryptographically-secure random string generator). It will be used to safeguard all API routes from incoming requests from untrusted sources.
+- `NUXT_SIGNED_COOKIE_JWT_SECRET`: Another secure string used to sign the Draft Mode cookies.
+
+In particular:
 
 - The `NUXT_SECRET_API_TOKEN` will be used to safeguard all API routes from incoming requests from untrusted sources;
 - The `NUXT_SIGNED_COOKIE_JWT_SECRET` will be used to sign the Draft Mode cookies.
@@ -72,6 +79,37 @@ Your website should be up and running on [http://localhost:3000](http://localhos
 ## VS Code
 
 It is highly recommended to follow [these instructions](https://gql-tada.0no.co/get-started/installation#vscode-setup) for an optimal experience with Visual Studio Code, including features like diagnostics, auto-completions, and type hovers for GraphQL.
+
+## Click-to-edit overlays
+
+This starter kit includes [@datocms/content-link](https://www.npmjs.com/package/@datocms/content-link), which provides intuitive click-to-edit overlays for your content.
+
+### How to use
+
+When viewing your website in draft mode, **press and hold the Alt/Option key** to enable click-to-edit mode. Interactive overlays will appear on all editable content. Release the key to disable the overlays.
+
+This feature works in two powerful ways:
+
+### 1. Standalone website editing
+
+Click on any content element to instantly open the DatoCMS editor for that specific field in a new tab. This makes it incredibly easy for editors to jump directly to the content they want to modify.
+
+### 2. Web Previews plugin Visual Editing mode
+
+When using the [Web Previews plugin](https://www.datocms.com/marketplace/plugins/i/datocms-plugin-web-previews) in Visual Editing mode, clicking on content opens the field editor in a side panel right next to your preview. The integration also enables:
+
+- **In-plugin navigation**: Users can navigate to different URLs within Visual mode (like a browser navigation bar), and the preview automatically updates to show the corresponding page
+- **Synchronized state**: The preview and DatoCMS interface stay in perfect sync
+
+This bidirectional communication is established automatically when your preview runs inside the Web Previews plugin iframe—no additional configuration needed.
+
+### How it works
+
+The implementation consists of three parts:
+
+1. **Data fetching** (`composables/useQuery.ts`): When fetching draft content, the `contentLink: 'v1'` option embeds stega-encoded metadata into text fields
+2. **ContentLink component** (`components/ContentLink/index.vue`): Creates interactive overlays and handles the Web Previews plugin integration
+3. **App integration** (`app.vue`): The ContentLink component is rendered only in draft mode
 
 ## <!--datocms-autoinclude-footer start-->
 

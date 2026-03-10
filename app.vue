@@ -1,4 +1,7 @@
 <template>
+  <ClientOnly>
+    <ContentLink v-if="isDraftModeEnabled" />
+  </ClientOnly>
   <header>
     <h1>DatoCMS + Nuxt Starter Kit</h1>
     <nav>
@@ -28,6 +31,7 @@ const query = graphql(
   [TagFragment],
 );
 
+const isDraftModeEnabled = useDraftMode();
 const data = await useQuery(query);
 
 useHead(() => {

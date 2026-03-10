@@ -1,7 +1,7 @@
 <template>
-  <div class="gallery">
+  <div class="gallery" data-datocms-content-link-boundary>
     <div>
-      <figure :key="asset.id" v-for="asset in unmaskedData.assets">
+      <figure :key="asset.id" v-for="asset in unmaskedData.assets" data-datocms-content-link-group>
         <!-- Display responsive image for each asset -->
         <ResponsiveImage :data="asset.responsiveImage" :imgStyle="{ width: 'auto' }" />
         <!-- Display title for each asset -->

@@ -18,6 +18,9 @@
       "type": "datocmsAccessToken",
       "tokenName": "CMA Only (Read)"
     },
+    "NUXT_PUBLIC_DATOCMS_BASE_EDITING_URL": {
+      "type": "datocmsProjectUrl"
+    },
     "NUXT_SECRET_API_TOKEN": {
       "type": "string",
       "value": "secretTokenProtectingWebhookEndpointsFromBeingCalledByAnyone"
