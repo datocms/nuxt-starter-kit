@@ -14,6 +14,8 @@ onMounted(() => {
     },
   });
 
+  controller.setCurrentPath(route.path);
+
   if (window.matchMedia('(hover: hover)').matches) {
     controller.enableClickToEdit();
   }

@@ -61,9 +61,7 @@ export async function useQuery<Result, Variables>(
       excludeInvalid: true,
       variables: options?.variables,
       contentLink: draftMode ? 'v1' : undefined,
-      baseEditingUrl: draftMode
-        ? config.public.datocmsBaseEditingUrl || undefined
-        : undefined,
+      baseEditingUrl: draftMode ? config.public.datocmsBaseEditingUrl || undefined : undefined,
     }),
     key: hash([query, options]),
     transform: (response: { data: Result; errors?: any[] }) => {
