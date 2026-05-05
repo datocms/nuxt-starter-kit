@@ -2,6 +2,8 @@ import { ApiError } from '@datocms/cma-client';
 import type { EventHandlerRequest, H3Event, HTTPMethod } from 'h3';
 import { serializeError } from 'serialize-error';
 
+const toError = (error: unknown) => (error instanceof Error ? error : new Error(String(error)));
+
 /**
  * To be used on API routes: ensure that an incoming request method matches one
  * of the allowed methods.
@@ -41,7 +43,7 @@ export function handleUnexpectedError(error: unknown) {
     });
   }
 
-  const { message, ...data } = serializeError(error);
+  const { message, ...data } = serializeError(toError(error));
 
   throw createError({
     statusCode: 500,
