@@ -1,12 +1,19 @@
 import { ImageBlockFragment } from '~/components/blocks/ImageBlock/fragments';
 import { ImageGalleryBlockFragment } from '~/components/blocks/ImageGalleryBlock/fragments';
 import { VideoBlockFragment } from '~/components/blocks/VideoBlock/fragments';
+import { PageInlineFragment } from '~/components/inlineRecords/PageInline/fragments';
+import { PageLinkFragment } from '~/components/linkToRecords/PageLink/fragments';
 import { TagFragment } from '~/lib/datocms/commonFragments';
 import { type ResultOf, graphql } from '~/lib/datocms/graphql';
 
 /**
  * The GraphQL query that will be executed for this route to generate the page
  * content and metadata.
+ *
+ * The page composes one query from the fragments exported by every
+ * sub-component it renders: the imports list mirrors the second argument of
+ * `graphql(...)` — adding `...FooFragment` to the query string means also
+ * adding `FooFragment` to the imports and to the composition array.
  *
  * Thanks to gql.tada, the result will be fully typed!
  */
@@ -26,31 +33,30 @@ export const query = graphql(
               id
               __typename
             }
-            ... on ImageBlockRecord {
-              ...ImageBlockFragment
-            }
-            ... on ImageGalleryBlockRecord {
-              ...ImageGalleryBlockFragment
-            }
-            ... on VideoBlockRecord {
-              ...VideoBlockFragment
-            }
+            ...ImageBlockFragment
+            ...ImageGalleryBlockFragment
+            ...VideoBlockFragment
           }
           links {
             ... on RecordInterface {
               id
               __typename
             }
-            ... on PageRecord {
-              title
-              slug
-            }
+            ...PageInlineFragment
+            ...PageLinkFragment
           }
         }
       }
     }
   `,
-  [TagFragment, ImageBlockFragment, ImageGalleryBlockFragment, VideoBlockFragment],
+  [
+    TagFragment,
+    ImageBlockFragment,
+    ImageGalleryBlockFragment,
+    VideoBlockFragment,
+    PageInlineFragment,
+    PageLinkFragment,
+  ],
 );
 
 type PageResult = NonNullable<ResultOf<typeof query>['page']>;
