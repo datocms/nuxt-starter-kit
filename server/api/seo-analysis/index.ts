@@ -70,9 +70,9 @@ export default eventHandler(async (event) => {
     const { data: item } = await client.items.rawFind<AnyModel>(itemId);
 
     // We can use this info to generate the frontend URL, and the page slug
-    const websitePath = recordToWebsiteRoute(item, locale, itemTypeId);
+    const websitePath = await recordToWebsiteRoute(item, locale);
 
-    const slug = recordToSlug(item, locale, itemTypeId);
+    const slug = await recordToSlug(item, locale);
 
     if (!websitePath) {
       throw createError({
