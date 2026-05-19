@@ -9,7 +9,7 @@
     "preview": "nuxt preview",
     "format": "npx prettier . --write",
     "postinstall": "nuxt prepare",
-    "generate-schema": "dotenv -c -- bash -c 'gql.tada generate schema https://graphql.datocms.com --header \"X-Exclude-Invalid: true\" --header \"Authorization: $NUXT_PUBLIC_DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN\"'",
+    "generate-schema": "dotenv -c -- bash -c 'gql.tada generate schema https://graphql.datocms.com --header \"X-Exclude-Invalid: true\" --header \"Authorization: $NUXT_PUBLIC_DATOCMS_PUBLISHED_CONTENT_CDA_TOKEN\" && gql.tada generate-output'",
     "generate-cma-types": "dotenv -c -- bash -c 'DATOCMS_API_TOKEN=$NUXT_DATOCMS_CMA_TOKEN npx datocms schema:generate lib/datocms/cma-types.ts'",
     "prepare": "npx simple-git-hooks && npm run generate-schema && npm run generate-cma-types",
     "lint": "prettier --check ."
