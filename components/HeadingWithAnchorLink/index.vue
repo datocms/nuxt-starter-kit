@@ -13,6 +13,7 @@
 
 import { render as structuredTextToPlainText } from 'datocms-structured-text-to-plain-text';
 import type { Heading } from 'datocms-structured-text-utils';
+import { stripStega } from 'vue-datocms';
 
 const { node } = defineProps<{
   node: Heading;
@@ -23,13 +24,21 @@ const { node } = defineProps<{
  * lowercase, eliminating non-alphanumeric characters, and removing any hyphens
  * at the beginning or end of the string.
  */
-const slugify = (str: string | null) =>
-  str
+const slugify = (value: string | null) => {
+  /**
+   * DatoCMS Content Link can add invisible editing markers to draft text.
+   * Keep those markers when rendering content, but strip them before deriving
+   * exact strings such as anchor IDs, URLs, comparisons, or metadata.
+   */
+  const str = stripStega(value || '');
+
+  return str
     ? str
         .toLowerCase()
         .replace(/[^a-z0-9]+/g, '-')
         .replace(/(^-|-$)+/g, '')
     : undefined;
+};
 
 const as = `h${node.level}` as const;
 
