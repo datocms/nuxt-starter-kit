@@ -26,8 +26,5 @@ export const ResponsiveImageFragment = graphql(/* GraphQL */ `
 
     # LQIP (base64-encoded)
     base64
-
-    # you can omit 'sizes' if you explicitly pass the 'sizes' prop to the image component
-    sizes
   }
 `);
