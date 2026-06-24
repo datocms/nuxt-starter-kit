@@ -1,5 +1,5 @@
 import { disableDraftMode } from '~/lib/api/draftMode';
-import { ensureHttpMethods, isRelativeUrl } from '~/lib/api/utils';
+import { ensureHttpMethods, isSafeRedirectUrl } from '~/lib/api/utils';
 
 /*
  * This API route disables Draft Mode, by deleting the signed cookie.
@@ -12,7 +12,7 @@ export default eventHandler(async (event) => {
   const url = query.redirect || '/';
 
   // Avoid open redirect vulnerabilities
-  if (!isRelativeUrl(url)) {
+  if (!isSafeRedirectUrl(url, getRequestURL(event))) {
     throw createError({ status: 422, message: 'URL must be relative!' });
   }
 
