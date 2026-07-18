@@ -95,7 +95,66 @@ When using the [Web Previews plugin](https://www.datocms.com/marketplace/plugins
 - **In-plugin navigation**: Users can navigate to different URLs within the Visual mode interface (like a browser navigation bar), and the preview automatically updates to show the corresponding page
 - **Synchronized state**: The preview and DatoCMS interface stay in perfect sync
 
-This bidirectional communication is established automatically when your preview runs inside the Web Previews plugin—no additional configuration needed.
+This bidirectional communication is established automatically when your preview runs inside the Web Previews plugin—no additional configuration needed **on the code side**. The Web Previews plugin itself, however, still needs to exist and point at your app. If you deployed through the marketplace that happens automatically; otherwise, see [Configuring Visual Editing manually](#configuring-visual-editing-manually) below.
+
+### Configuring Visual Editing manually
+
+When you deploy this starter through the [DatoCMS marketplace](https://dashboard.datocms.com/deploy?repo=datocms%2Fnuxt-starter-kit%3Amain), the
+Web Previews plugin (which powers Visual Editing) is installed and configured for
+you automatically by the [`server/api/post-deploy/index.ts`](server/api/post-deploy/index.ts) code.
+
+If you're **developing locally** or **deploying outside the one-click flow**, that
+step doesn't run, so you need to set the plugin up by hand. Here's how to
+reproduce it.
+
+#### 1. Make your app reachable from DatoCMS
+
+DatoCMS is a cloud service, and the Web Previews plugin runs inside the DatoCMS
+interface — not on your machine. When it needs preview links or wants to enable
+Draft Mode, **DatoCMS's own servers make an HTTP request to the URLs you configure
+here**. The traffic originates from DatoCMS in the cloud and has to travel _to_
+your app.
+
+That's why `http://localhost:3000` doesn't work: `localhost` means "the machine
+making the request," so DatoCMS would be calling itself, not your dev server. For
+DatoCMS to reach your app, the app has to be available at a public internet address.
+
+- **Deployed app**: use its public URL (e.g. `https://your-app.example.com`).
+- **Local development**: put a tunnel in front of your dev server — e.g.
+  `ngrok http 3000` or `cloudflared tunnel` — which gives you a public URL that
+  forwards to your local server.
+
+In the steps below, replace `<BASE_URL>` with that public URL and `<SECRET>` with
+the value of your `NUXT_SECRET_API_TOKEN` environment variable.
+
+#### 2. Install the Web Previews plugin
+
+In your DatoCMS project, go to **Settings > Plugins > Add a new plugin**, search
+for **Web Previews**, and install it.
+
+#### 3. Configure the plugin
+
+Open the plugin's settings and add a single frontend:
+
+| Setting                                    | Value                                             |
+| ------------------------------------------ | ------------------------------------------------- |
+| **Name**                                   | `Production`                                      |
+| **Preview webhook URL**                    | `<BASE_URL>/api/preview-links?token=<SECRET>`     |
+| **Enable draft mode URL** (Visual Editing) | `<BASE_URL>/api/draft-mode/enable?token=<SECRET>` |
+| **Initial path** (Visual Editing)          | `/`                                               |
+| **Start open**                             | enabled                                           |
+
+Both endpoints are guarded by `NUXT_SECRET_API_TOKEN`; if the token in the URL doesn't
+match your environment variable, the requests are rejected.
+
+#### 4. Verify
+
+Open a record in DatoCMS and switch to the Web Previews / Visual Editing view. The
+preview should render, and the starter's click-to-edit interaction should work.
+
+> The same [`server/api/post-deploy/index.ts`](server/api/post-deploy/index.ts) code also configures
+> other things (such as the SEO/Readability Analysis plugin) — treat it as the
+> authoritative reference if you need to set those up by hand too.
 
 ### How it works
 
@@ -126,6 +185,7 @@ It is highly recommended to follow [these instructions](https://gql-tada.0no.co/
 **Building with AI:** [Agent Skills](https://www.datocms.com/docs/agent-skills) turn coding assistants (Claude Code, Cursor) into expert DatoCMS developers, with full read/write via the auto-installed CLI. No local terminal? Use the [MCP Server](https://www.datocms.com/docs/mcp-server) instead.
 
 **Talking to DatoCMS from code:**
+
 - [Content Delivery API](https://www.datocms.com/docs/content-delivery-api) (CDA) — the fast, read-only GraphQL API your website/app uses to **fetch** published content.
 - [Content Management API](https://www.datocms.com/docs/content-management-api) (CMA) — the REST API for **creating and updating** content, models, and project settings (think scripts, migrations, integrations).
 - [CLI](https://www.datocms.com/docs/scripting-migrations/installing-the-cli) — terminal tool for schema migrations and importing from Contentful/WordPress.
@@ -133,6 +193,5 @@ It is highly recommended to follow [these instructions](https://gql-tada.0no.co/
 **Framework guides:** end-to-end recipes for fetching content, rendering Structured Text, optimizing images/video, handling SEO, and setting up live preview with visual editing in [Next.js](https://www.datocms.com/docs/next-js), [Nuxt](https://www.datocms.com/docs/nuxt), [Svelte](https://www.datocms.com/docs/svelte), and [Astro](https://www.datocms.com/docs/astro).
 
 **Want a head start?** Browse our [starter projects](https://www.datocms.com/marketplace/starters) — ready-to-deploy example sites for popular frameworks.
-
 
 <!--datocms-autoinclude-footer end-->
