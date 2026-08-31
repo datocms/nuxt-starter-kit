@@ -56,6 +56,22 @@ async function installSEOAnalysisPlugin(client: Client, baseUrl: string) {
   });
 }
 
+/**
+ * The DatoCMS API token arrives in the request body, so without this check the
+ * endpoint would happily write our SECRET_API_TOKEN into any project a caller
+ * names, and the caller could then read it back from their own project.
+ */
+async function ensureSameProject(client: Client, ourApiToken: string) {
+  const ourClient = buildClient({ apiToken: ourApiToken });
+
+  const [callerProject, ourProject] = await Promise.all([
+    client.site.find(),
+    ourClient.site.find(),
+  ]);
+
+  return callerProject.id === ourProject.id;
+}
+
 export default eventHandler(async (event) => {
   try {
     ensureHttpMethods(event, 'OPTIONS', 'POST');
@@ -68,6 +84,10 @@ export default eventHandler(async (event) => {
 
     const client = buildClient({ apiToken: body.datocmsApiToken });
     const baseUrl = body.frontendUrl as string;
+
+    if (!(await ensureSameProject(client, useRuntimeConfig().datocmsCmaToken))) {
+      throw createError({ message: 'Invalid token', status: 401 });
+    }
 
     await Promise.all([
       installWebPreviewsPlugin(client, baseUrl),
