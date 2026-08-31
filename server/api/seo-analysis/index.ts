@@ -39,11 +39,11 @@ export default eventHandler(async (event) => {
 
     const config = useRuntimeConfig();
 
-    // Parse query string parameters
-    const { token } = getQuery(event);
+    // The token is sent by the plugin as a request header (see /api/post-deploy)
+    const token = getHeader(event, 'authorization')?.replace(/^Bearer /, '');
 
     // Ensure that the request is coming from a trusted source
-    if (token !== config.secretApiToken) {
+    if (!token || token !== config.secretApiToken) {
       throw createError({ message: 'Invalid token', status: 401 });
     }
 
