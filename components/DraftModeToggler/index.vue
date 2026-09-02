@@ -13,10 +13,7 @@ async function handleClick() {
   if (isDraftModeEnabled) {
     response = await fetch('/api/draft-mode/disable');
   } else {
-    const token = prompt(
-      'To enter Draft Mode, you need to insert the NUXT_SECRET_API_TOKEN:',
-      'secretTokenProtectingWebhookEndpointsFromBeingCalledByAnyone',
-    );
+    const token = prompt('To enter Draft Mode, you need to insert the NUXT_SECRET_API_TOKEN:');
     if (!token) {
       return;
     }

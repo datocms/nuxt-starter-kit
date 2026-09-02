@@ -22,16 +22,17 @@
       "type": "datocmsProjectUrl"
     },
     "NUXT_SECRET_API_TOKEN": {
-      "type": "string",
-      "value": "secretTokenProtectingWebhookEndpointsFromBeingCalledByAnyone"
+      "type": "secret",
+      "format": "readable",
+      "label": "Draft Mode password",
+      "description": "You'll need it to turn on Draft Mode from the website."
     },
     "NUXT_PUBLIC_DRAFT_MODE_COOKIE_NAME": {
       "type": "string",
       "value": "__draftMode"
     },
     "NUXT_SIGNED_COOKIE_JWT_SECRET": {
-      "type": "string",
-      "value": "someSecretString"
+      "type": "secret"
     }
   },
   "livePreviewUrl": "https://datocms-nuxt-starter-kit.vercel.app/",
