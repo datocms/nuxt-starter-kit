@@ -18,7 +18,7 @@
     "@datocms/cda-client": "^0.3.1",
     "@datocms/cma-client": "^6.1.0",
     "@mux/mux-player": "^3.10.1",
-    "datocms-structured-text-to-plain-text": "^5.1.16",
+    "datocms-structured-text-to-plain-text": "^6.0.0",
     "gql.tada": "^1.9.0",
     "highlight.js": "^11.11.1",
     "jsonwebtoken": "^9.0.3",
