@@ -29,6 +29,8 @@ export default defineNuxtConfig({
       datocmsBaseEditingUrl: '',
       // set by NUXT_PUBLIC_DRAFT_MODE_COOKIE_NAME env variable
       draftModeCookieName: '',
+      // set by NUXT_PUBLIC_DRAFT_MODE_DEMO_PASSWORD env variable (only on our public demo!)
+      draftModeDemoPassword: '',
     },
   },
   routeRules: {

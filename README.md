@@ -65,6 +65,8 @@ Then set both `NUXT_SECRET_API_TOKEN` and `NUXT_SIGNED_COOKIE_JWT_SECRET` by gen
 - The `NUXT_SECRET_API_TOKEN` will be used to safeguard all API routes from incoming requests from untrusted sources;
 - The `NUXT_SIGNED_COOKIE_JWT_SECRET` will be used to sign the Draft Mode cookies.
 
+There's also an optional `NUXT_PUBLIC_DRAFT_MODE_DEMO_PASSWORD`: when set, its value pre-fills the Draft Mode prompt for every visitor. We only use it on our public demo, so that anyone can try Draft Mode. Leave it unset on your own project.
+
 #### Run your project locally
 
 ```bash
