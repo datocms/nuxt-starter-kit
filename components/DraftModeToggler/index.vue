@@ -6,6 +6,7 @@
 
 <script setup lang="ts">
 const isDraftModeEnabled = useDraftMode();
+const { draftModeDemoPassword } = useRuntimeConfig().public;
 
 async function handleClick() {
   let response: Response;
@@ -13,7 +14,10 @@ async function handleClick() {
   if (isDraftModeEnabled) {
     response = await fetch('/api/draft-mode/disable');
   } else {
-    const token = prompt('To enter Draft Mode, you need to insert the NUXT_SECRET_API_TOKEN:');
+    const token = prompt(
+      'To enter Draft Mode, you need to insert the NUXT_SECRET_API_TOKEN:',
+      draftModeDemoPassword,
+    );
     if (!token) {
       return;
     }
