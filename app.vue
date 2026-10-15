@@ -23,6 +23,7 @@
 </template>
 
 <script setup lang="ts">
+import type { ReactiveHead } from '@unhead/vue';
 import { toHead } from 'vue-datocms';
 import { TagFragment } from './lib/datocms/commonFragments';
 import { graphql } from './lib/datocms/graphql';
@@ -46,6 +47,8 @@ const query = graphql(
 const data = await useQuery(query);
 
 useHead(() => {
-  return toHead(data.value?._site?.faviconMetaTags || []);
+  // The declared return type of toHead() leaves out the tag attributes (rel, href, content...)
+  // it copies into every entry, which the stricter useHead() types would otherwise reject.
+  return toHead(data.value?._site?.faviconMetaTags || []) as unknown as ReactiveHead;
 });
 </script>
