@@ -39,6 +39,7 @@ import {
   LazyBlocksVideoBlock,
   LinkToRecordsPageLink,
 } from '#components';
+import type { ReactiveHead } from '@unhead/vue';
 import type {
   RenderBlockContext,
   RenderInlineRecordContext,
@@ -55,8 +56,8 @@ const data = await useQuery(query, { variables: { slug } });
 
 if (!data.value?.page) {
   throw createError({
-    statusCode: 404,
-    statusMessage: 'Page Not Found',
+    status: 404,
+    statusText: 'Page Not Found',
     fatal: true,
   });
 }
@@ -66,7 +67,9 @@ if (!data.value?.page) {
  * of meta tags based on the `_seoMetaTags` present in a DatoCMS GraphQL query.
  */
 useHead(() => {
-  return toHead(data.value?.page?._seoMetaTags || []);
+  // The declared return type of toHead() leaves out the tag attributes (rel, href, content...)
+  // it copies into every entry, which the stricter useHead() types would otherwise reject.
+  return toHead(data.value?.page?._seoMetaTags || []) as unknown as ReactiveHead;
 });
 
 /*

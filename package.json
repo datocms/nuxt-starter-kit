@@ -18,28 +18,42 @@
     "lint": "prettier --check ."
   },
   "dependencies": {
-    "@datocms/cda-client": "^0.3.1",
-    "@datocms/cma-client": "^6.1.0",
-    "@mux/mux-player": "^3.10.1",
+    "@datocms/cda-client": "^0.3.2",
+    "@datocms/cma-client": "^6.8.0",
+    "@mux/mux-player": "^3.14.0",
     "datocms-structured-text-to-plain-text": "^6.0.0",
-    "gql.tada": "^1.9.0",
-    "highlight.js": "^11.11.1",
+    "gql.tada": "^1.11.4",
+    "highlight.js": "^11.12.0",
     "jsonwebtoken": "^9.0.3",
     "jwt-decode": "^4.0.0",
-    "node-html-parser": "^7.0.1",
-    "nuxt": "^4.2.2",
+    "node-html-parser": "^9.0.4",
+    "nuxt": "^4.6.1",
     "vue": "latest",
-    "vue-datocms": "^8.1.16"
+    "vue-datocms": "^8.1.19"
   },
   "devDependencies": {
-    "@types/jsdom": "^27.0.0",
+    "@types/jsdom": "^30.0.0",
     "@types/jsonwebtoken": "^9.0.10",
-    "datocms": "^4.0.26",
+    "datocms": "^4.2.0",
     "dotenv-cli": "^11.0.0",
-    "prettier": "^3.7.4",
-    "simple-git-hooks": "^2.13.1"
+    "prettier": "^3.9.10",
+    "simple-git-hooks": "^2.14.0"
   },
   "simple-git-hooks": {
     "pre-commit": "npm run format"
+  },
+  "overrides": {
+    "archiver-utils": {
+      "glob": "^13.0.6"
+    },
+    "tty-table": {
+      "csv": "^6.6.4"
+    }
+  },
+  "allowScripts": {
+    "esbuild@0.28.2": true,
+    "fsevents@2.3.3": true,
+    "simple-git-hooks@2.14.0": true,
+    "yarn@1.22.22": true
   }
 }
