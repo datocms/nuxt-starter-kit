@@ -1,4 +1,4 @@
-import type { ApiTypes, RawApiTypes } from '@datocms/cma-client';
+import { type ApiTypes, buildClient, type RawApiTypes } from '@datocms/cma-client';
 import { ensureHttpMethods, handleUnexpectedError } from '~/lib/api/utils';
 import type { AnyModel } from '~/lib/datocms/cma-types';
 import { recordToWebsiteRoute } from '~/lib/datocms/recordInfo';
@@ -6,6 +6,7 @@ import { recordToWebsiteRoute } from '~/lib/datocms/recordInfo';
 type WebPreviewsRequestBody = {
   item: RawApiTypes.Item<AnyModel>;
   itemType: ApiTypes.ItemType;
+  environmentId: string;
   locale: string;
 };
 
@@ -49,12 +50,42 @@ export default eventHandler(async (event) => {
      * along with information about which locale they are currently viewing in
      * the interface
      */
-    const { item, locale } = await readBody<WebPreviewsRequestBody>(event, {
+    const { item, locale, environmentId } = await readBody<WebPreviewsRequestBody>(event, {
       strict: true,
     });
 
     // We can use this info to generate the frontend URL associated
     const url = await recordToWebsiteRoute(item, locale);
+
+    /**
+     * The plugin only sends the current (draft) version of the record. If it has
+     * unpublished changes (e.g. a modified slug), the published URL might differ,
+     * so we compute it from the published version.
+     *
+     * See "How the preview links are built" in the README.
+     */
+    let publishedUrl = url;
+
+    if (url && item.meta.status === 'updated') {
+      try {
+        const client = buildClient({
+          apiToken: config.datocmsCmaToken,
+          environment: environmentId,
+        });
+
+        const { data: publishedItem } = await client.items.rawFind<AnyModel>(item.id, {
+          version: 'published',
+        });
+
+        publishedUrl = await recordToWebsiteRoute(publishedItem, locale);
+      } catch (error) {
+        /**
+         * If the published version can't be fetched (e.g. missing CMA token),
+         * fall back to the current URL instead of losing every preview link.
+         */
+        console.error(error);
+      }
+    }
 
     const response: WebPreviewsResponse = { previewLinks: [] };
 
@@ -82,7 +113,7 @@ export default eventHandler(async (event) => {
       }
 
       /** If status is not draft, it means that it has a published version! */
-      if (item.meta.status !== 'draft') {
+      if (publishedUrl && item.meta.status !== 'draft') {
         /**
          * Generate a URL that first exits from Draft Mode, and then
          * redirects to the desired URL.
@@ -94,7 +125,7 @@ export default eventHandler(async (event) => {
              * We generate the URL in a way that it first passes through the
              * endpoint that disables the Draft Mode.
              */
-            `/api/draft-mode/disable?redirect=${url}`,
+            `/api/draft-mode/disable?redirect=${publishedUrl}`,
             getRequestURL(event),
           ).toString(),
         });
